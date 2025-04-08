@@ -14,6 +14,7 @@ namespace HankoSpa.Data
         public DbSet<Servicio> Servicios { get; set; }
         public DbSet<CitasServicios> CitasServicios { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CitasServicios>()

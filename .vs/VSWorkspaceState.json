@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\HankoSpa"
   ],
-  "SelectedNode": "\\HankoSpa.sln",
+  "SelectedNode": "\\HankoSpa\\Program.cs",
   "PreviewInSolutionExplorer": false
 }
