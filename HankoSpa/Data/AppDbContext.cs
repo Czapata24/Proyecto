@@ -13,6 +13,7 @@ namespace HankoSpa.Data
         public DbSet<Cita> Citas { get; set; }
         public DbSet<Servicio> Servicios { get; set; }
         public DbSet<CitasServicios> CitasServicios { get; set; }
+        public IEnumerable<object> UsuarioID { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

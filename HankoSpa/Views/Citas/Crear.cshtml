@@ -1,0 +1,23 @@
+﻿@model AgendaCitas.Models.CrearCitaViewModel
+
+<h2>Asignar Nueva Cita</h2>
+
+<form asp-action="Crear" method="post">
+    <div>
+        <label>Fecha</label>
+        <input asp-for="FechaCita" type="date" class="form-control" />
+    </div>
+    <div>
+        <label>Hora</label>
+        <input asp-for="HoraCita" type="time" class="form-control" />
+    </div>
+    <div>
+        <label>Usuario</label>
+        <select asp-for="UsuarioID" asp-items="Model.Usuarios" class="form-control"></select>
+    </div>
+    <div>
+        <label>Servicio</label>
+        <select asp-for="Citas_ServiciosID" asp-items="Model.Servicios" class="form-control"></select>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Asignar Cita</button>
+</form>
