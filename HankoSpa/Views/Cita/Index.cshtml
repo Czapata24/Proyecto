@@ -1,0 +1,36 @@
+@model List<CitaResponseDTO>
+
+@{
+    ViewData["Title"] = "Listado de Citas";
+}
+
+<h2>Listado de Citas</h2>
+
+<a asp-action="Crear" class="btn btn-primary">Nueva Cita</a>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Paciente</th>
+            <th>Fecha</th>
+            <th>Servicios</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var cita in Model)
+    {
+        <tr>
+            <td>@cita.NombrePaciente</td>
+            <td>@cita.FechaCita.ToString("dd/MM/yyyy")</td>
+            <td>
+                <ul>
+                    @foreach (var servicio in cita.Servicios)
+                    {
+                        <li>@servicio.NombreServicio (@servicio.Precio.ToString("C"))</li>
+                    }
+                </ul>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

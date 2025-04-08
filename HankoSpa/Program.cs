@@ -38,3 +38,5 @@ app.MapControllerRoute(
 
 
 app.Run();
+
+builder.Services.AddSingleton<ICitaService, CitaService>();

@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 ﻿using Microsoft.AspNetCore.Mvc;
 using DTOs;
 using FluentValidation;
@@ -61,5 +62,60 @@ namespace Controllers
             _citaService.Agregar(cita);
             return RedirectToAction("Index");
         }
+=======
+﻿// Controllers/CitaController.cs
+
+using Microsoft.AspNetCore.Mvc;
+using HankoSpa.Services;
+using HankoSpa.DTOs;
+
+public class CitaController : Controller
+{
+    private readonly ICitaService _citaService;
+
+    public CitaController(ICitaService citaService)
+    {
+        _citaService = citaService;
+>>>>>>> Stashed changes
     }
+
+    public IActionResult Index()
+    {
+        var citas = _citaService.ObtenerTodas();
+        return View(citas); // Esto va a Index.cshtml
+    }
+
+    // GET: /Cita/
+public IActionResult Index()
+{
+    var citas = _citaService.ObtenerTodas();
+    return View(citas); // Renderiza Index.cshtml
+}
+
+// GET: /Cita/Crear
+[HttpGet]
+public IActionResult Crear()
+{
+    var servicios = _citaService.ObtenerServiciosDisponibles();
+    ViewBag.Servicios = servicios;
+    return View(); // Renderiza Crear.cshtml
+}
+
+// POST: /Cita/Crear
+[HttpPost]
+public IActionResult Crear(CitaDTO citaDto, List<int> ServiciosSeleccionados)
+{
+    if (ServiciosSeleccionados != null)
+        citaDto.ServiciosSeleccionados = ServiciosSeleccionados;
+
+    if (!ModelState.IsValid)
+    {
+        ViewBag.Servicios = _citaService.ObtenerServiciosDisponibles();
+        return View(citaDto);
+    }
+
+    _citaService.Crear(citaDto);
+    return RedirectToAction("Index");
+}
+
 }
