@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\MANUELA\\Desktop\\hanko\\Proyecto\\HankoSpa\\HankoSpa.csproj": {}
+    "C:\\Users\\gusta\\OneDrive\\Documentos\\GitHub\\Proyecto\\HankoSpa\\HankoSpa.csproj": {}
   },
   "projects": {
-    "C:\\Users\\MANUELA\\Desktop\\hanko\\Proyecto\\HankoSpa\\HankoSpa.csproj": {
+    "C:\\Users\\gusta\\OneDrive\\Documentos\\GitHub\\Proyecto\\HankoSpa\\HankoSpa.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\MANUELA\\Desktop\\hanko\\Proyecto\\HankoSpa\\HankoSpa.csproj",
+        "projectUniqueName": "C:\\Users\\gusta\\OneDrive\\Documentos\\GitHub\\Proyecto\\HankoSpa\\HankoSpa.csproj",
         "projectName": "HankoSpa",
-        "projectPath": "C:\\Users\\MANUELA\\Desktop\\hanko\\Proyecto\\HankoSpa\\HankoSpa.csproj",
-        "packagesPath": "C:\\Users\\MANUELA\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\MANUELA\\Desktop\\hanko\\Proyecto\\HankoSpa\\obj\\",
+        "projectPath": "C:\\Users\\gusta\\OneDrive\\Documentos\\GitHub\\Proyecto\\HankoSpa\\HankoSpa.csproj",
+        "packagesPath": "C:\\Users\\gusta\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\gusta\\OneDrive\\Documentos\\GitHub\\Proyecto\\HankoSpa\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\MANUELA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\gusta\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -51,10 +50,6 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
-              "target": "Package",
-              "version": "[12.0.1, )"
-            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.3, )"
@@ -89,7 +84,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
