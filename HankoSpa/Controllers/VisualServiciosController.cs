@@ -4,11 +4,11 @@ using HankoSpa.Data;
 using Microsoft.AspNetCore.Mvc;
 using HankoSpa.Models;
 
-public class ServiciosController : Controller
+public class VisualServiciosController : Controller
 {
     private readonly AppDbContext _context;
 
-    public ServiciosController(AppDbContext context)
+    public VisualServiciosController(AppDbContext context)
     {
         _context = context;
     }
