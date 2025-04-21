@@ -2,10 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\HankoSpa",
-    "\\HankoSpa\\Models",
-    "\\HankoSpa\\Views",
-    "\\HankoSpa\\Views\\Shared"
+    "\\HankoSpa\\Controllers"
   ],
-  "SelectedNode": "\\HankoSpa\\Models\\Servicio.cs",
+  "SelectedNode": "\\HankoSpa\\Controllers\\AdminServicioController.cs",
   "PreviewInSolutionExplorer": false
 }

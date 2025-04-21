@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gskT6o9OlQw=",
+  "dgSpecHash": "PLCVBYO/61I=",
   "success": true,
-  "projectFilePath": "C:\\Users\\MANUELA\\Desktop\\Proyecto\\HankoSpa\\HankoSpa.csproj",
+  "projectFilePath": "D:\\ANDRES UNIVERSIDAD\\PROGRAMACION DE SOFTWARE\\PROYECTO HENKO\\HankoSpa\\HankoSpa.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\MANUELA\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\MANUELA\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

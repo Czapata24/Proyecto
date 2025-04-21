@@ -4769,11 +4769,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\MANUELA\\Desktop\\Proyecto\\HankoSpa\\HankoSpa.csproj",
+      "projectUniqueName": "D:\\ANDRES UNIVERSIDAD\\PROGRAMACION DE SOFTWARE\\PROYECTO HENKO\\HankoSpa\\HankoSpa.csproj",
       "projectName": "HankoSpa",
-      "projectPath": "C:\\Users\\MANUELA\\Desktop\\Proyecto\\HankoSpa\\HankoSpa.csproj",
+      "projectPath": "D:\\ANDRES UNIVERSIDAD\\PROGRAMACION DE SOFTWARE\\PROYECTO HENKO\\HankoSpa\\HankoSpa.csproj",
       "packagesPath": "C:\\Users\\MANUELA\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\MANUELA\\Desktop\\Proyecto\\HankoSpa\\obj\\",
+      "outputPath": "D:\\ANDRES UNIVERSIDAD\\PROGRAMACION DE SOFTWARE\\PROYECTO HENKO\\HankoSpa\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
