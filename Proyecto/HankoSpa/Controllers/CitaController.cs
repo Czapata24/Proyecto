@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using HankoSpa.Services.Interfaces;
 using HankoSpa.DTOs;
-using HankoSpa.Models;
 
 namespace HankoSpa.Controllers
 {
-    public class CitasController : Controller
+    public class CitaController : Controller
     {
         private readonly ICitaServices _citaService;
 
-        public CitasController(ICitaServices citaService)
+        public CitaController(ICitaServices citaService)
         {
             _citaService = citaService;
         }
 
-        // GET: Citas
+        // GET: Cita
         public async Task<IActionResult> Index()
         {
             var response = await _citaService.GetAllAsync();
@@ -22,29 +22,19 @@ namespace HankoSpa.Controllers
             if (!response.IsSuccess)
             {
                 ViewBag.ErrorMessage = response.Message;
-                return View(new List<Cita>());
+                return View(new List<CitaDTO>());
             }
 
-            // Convertir CitaDTO a Cita
-            var citas = response.Result.Select(dto => new Cita
-            {
-                CitaId = dto.CitaId,
-                FechaCita = dto.FechaCita,
-                HoraCita = dto.HoraCita,
-                EstadoCita = dto.EstadoCita,
-                UsuarioID = dto.UsuarioID
-            }).ToList();
-
-            return View(citas);
+            return View(response.Result);
         }
 
-        // GET: Citas/Create
+        // GET: Cita/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Citas/Create
+        // POST: Cita/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CitaDTO citaDTO)
@@ -65,7 +55,7 @@ namespace HankoSpa.Controllers
             return View(citaDTO);
         }
 
-        // GET: Citas/Edit/5
+        // GET: Cita/Edit/5
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -79,7 +69,7 @@ namespace HankoSpa.Controllers
             return View(response.Result);
         }
 
-        // POST: Citas/Edit/5
+        // POST: Cita/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, CitaDTO citaDTO)
@@ -101,7 +91,7 @@ namespace HankoSpa.Controllers
             return View(citaDTO);
         }
 
-        // GET: Citas/Delete/5
+        // GET: Cita/Delete/5
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -117,7 +107,7 @@ namespace HankoSpa.Controllers
             return View(response.Result);
         }
 
-        // POST: Citas/Delete/5
+        // POST: Cita/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

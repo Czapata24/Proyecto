@@ -1,164 +1,128 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
-using HankoSpa.Data;
 using HankoSpa.DTOs;
 using HankoSpa.Models;
 using HankoSpa.Nucleo;
+using HankoSpa.Repository;
 using HankoSpa.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace HankoSpa.Services
 {
     public class CitasService : ICitaServices
     {
-        private readonly AppDbContext _context;
+        private readonly ICitaRepository _repository;
         private readonly IMapper _mapper;
 
-        public CitasService(AppDbContext context, IMapper mapper)
+        public CitasService(ICitaRepository repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
             _mapper = mapper;
         }
 
+        // Obtener todas las citas
         public async Task<Response<List<CitaDTO>>> GetAllAsync()
         {
-            var response = new Response<List<CitaDTO>>();
             try
             {
-                var citas = await _context.Citas.ToListAsync();
+                var citas = await _repository.GetAllAsync();
                 var dtoList = _mapper.Map<List<CitaDTO>>(citas);
-                response.IsSuccess = true;
-                response.Result = dtoList;
-                response.Message = "Citas obtenidas correctamente.";
+                return new Response<List<CitaDTO>>(true, "Citas obtenidas correctamente.", dtoList);
             }
             catch (Exception ex)
             {
-                response.IsSuccess = false;
-                response.Errors = new List<string> { ex.Message };
-                response.Message = "Error al obtener las citas.";
+                return HandleException<List<CitaDTO>>(ex, "Error al obtener las citas.");
             }
-
-            return response;
         }
 
+        // Obtener una cita por su ID
         public async Task<Response<CitaDTO>> GetOneAsync(int id)
         {
-            var response = new Response<CitaDTO>();
             try
             {
-                var cita = await _context.Citas.FindAsync(id);
+                var cita = await _repository.GetByIdAsync(id);
                 if (cita == null)
-                {
-                    response.IsSuccess = false;
-                    response.Message = "Cita no encontrada.";
-                    return response;
-                }
+                    return new Response<CitaDTO>(false, "Cita no encontrada.");
 
-                response.IsSuccess = true;
-                response.Result = _mapper.Map<CitaDTO>(cita);
-                response.Message = "Cita obtenida correctamente.";
+                var dto = _mapper.Map<CitaDTO>(cita);
+                return new Response<CitaDTO>(true, "Cita obtenida correctamente.", dto);
             }
             catch (Exception ex)
             {
-                response.IsSuccess = false;
-                response.Errors = new List<string> { ex.Message };
-                response.Message = "Error al obtener la cita.";
+                return HandleException<CitaDTO>(ex, "Error al obtener la cita.");
             }
-
-            return response;
         }
 
+        // Crear una nueva cita
         public async Task<Response<CitaDTO>> CreateAsync(CitaDTO dto)
         {
-            var response = new Response<CitaDTO>();
             try
             {
                 var cita = _mapper.Map<Cita>(dto);
-                _context.Citas.Add(cita);
-                await _context.SaveChangesAsync();
+                await _repository.AddAsync(cita);
 
-                response.IsSuccess = true;
-                response.Result = _mapper.Map<CitaDTO>(cita);
-                response.Message = "Cita creada correctamente.";
+                var resultDto = _mapper.Map<CitaDTO>(cita);
+                return new Response<CitaDTO>(true, "Cita creada correctamente.", resultDto);
             }
             catch (Exception ex)
             {
-                response.IsSuccess = false;
-                response.Errors = new List<string> { ex.Message };
-                response.Message = "Error al crear la cita.";
-            }
+                return HandleException<CitaDTO>(ex, ex.Message); 
 
-            return response;
+            }
         }
 
+        // Editar una cita existente
         public async Task<Response<CitaDTO>> EditAsync(CitaDTO dto)
         {
-            var response = new Response<CitaDTO>();
             try
             {
-                var cita = await _context.Citas.FindAsync(dto.CitaId);
+                var cita = await _repository.GetByIdAsync(dto.CitaId);
                 if (cita == null)
-                {
-                    response.IsSuccess = false;
-                    response.Message = "Cita no encontrada.";
-                    return response;
-                }
+                    return new Response<CitaDTO>(false, "Cita no encontrada.");
 
-                // Actualiza los campos necesarios
+                // Actualizar propiedades
                 cita.FechaCita = dto.FechaCita;
                 cita.HoraCita = dto.HoraCita;
                 cita.EstadoCita = dto.EstadoCita;
                 cita.UsuarioID = dto.UsuarioID;
 
-                _context.Citas.Update(cita);
-                await _context.SaveChangesAsync();
+                await _repository.UpdateAsync(cita);
 
-                response.IsSuccess = true;
-                response.Result = _mapper.Map<CitaDTO>(cita);
-                response.Message = "Cita actualizada correctamente.";
+                var resultDto = _mapper.Map<CitaDTO>(cita);
+                return new Response<CitaDTO>(true, "Cita actualizada correctamente.", resultDto);
             }
             catch (Exception ex)
             {
-                response.IsSuccess = false;
-                response.Errors = new List<string> { ex.Message };
-                response.Message = "Error al editar la cita.";
+                return HandleException<CitaDTO>(ex, "Error al editar la cita.");
             }
-
-            return response;
         }
 
+        // Eliminar una cita por su ID
         public async Task<Response<object>> DeleteAsync(int id)
         {
-            var response = new Response<object>();
             try
             {
-                var cita = await _context.Citas.FindAsync(id);
+                var cita = await _repository.GetByIdAsync(id);
                 if (cita == null)
-                {
-                    response.IsSuccess = false;
-                    response.Message = "Cita no encontrada.";
-                    return response;
-                }
+                    return new Response<object>(false, "Cita no encontrada.");
 
-                _context.Citas.Remove(cita);
-                await _context.SaveChangesAsync();
-
-                response.IsSuccess = true;
-                response.Message = "Cita eliminada correctamente.";
+                await _repository.DeleteAsync(id);
+                return new Response<object>(true, "Cita eliminada correctamente.");
             }
             catch (Exception ex)
             {
-                response.IsSuccess = false;
-                response.Errors = new List<string> { ex.Message };
-                response.Message = "Error al eliminar la cita.";
+                return HandleException<object>(ex, "Error al eliminar la cita.");
             }
+        }
 
-            return response;
-
-
+        // Manejo centralizado de excepciones
+        private Response<T> HandleException<T>(Exception ex, string message)
+        {
+            return new Response<T>(false, message)
+            {
+                Errors = new List<string> { ex.Message }
+            };
         }
     }
 }

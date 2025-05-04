@@ -1,14 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Proyecto",
-    "\\Proyecto\\HankoSpa",
-    "\\Proyecto\\HankoSpa\\DTOs",
-    "\\Proyecto\\HankoSpa\\Models",
-    "\\Proyecto\\HankoSpa\\Repository",
-    "\\Proyecto\\HankoSpa\\Repository\\Users",
-    "\\Proyecto\\HankoSpa\\Services"
+    "\\HankoSpa",
+    "\\HankoSpa\\Migrations",
+    "\\HankoSpa\\Repository"
   ],
-  "SelectedNode": "\\Proyecto\\HankoSpa\\HankoSpa.sln",
+  "SelectedNode": "\\HankoSpa\\Migrations\\20250503220412_InitialMigration.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -22,7 +22,7 @@ namespace HankoSpa.DTOs
         public String UsuarioID { get; set; }
 
         // Relación muchos a muchos con servicios
-        [Required(ErrorMessage = "Debe seleccionar al menos un servicio")]
-        public List<int> ServiciosSeleccionados { get; set; }
+        //[Required(ErrorMessage = "Debe seleccionar al menos un servicio")]
+        //public List<int> ServiciosSeleccionados { get; set; }
     }
 }
