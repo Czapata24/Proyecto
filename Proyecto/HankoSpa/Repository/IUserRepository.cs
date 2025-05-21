@@ -5,8 +5,6 @@ namespace HankoSpa.Repository
 {
     public interface IUserRepository
     {
-
-       
         Task<IdentityResult> ConfirmEmailAsync(User user, string token);
         Task<string> GenerateEmailConfirmationTokenAsync(User user);
         Task<User> GetUserAsync(string email);
@@ -20,6 +18,7 @@ namespace HankoSpa.Repository
         Task CheckRoleAsync(string roleName);
         Task AddUserToRoleAsync(User user, string roleName);
         Task<bool> IsUserInRoleAsync(User user, string roleName);
+        
 
 
     }

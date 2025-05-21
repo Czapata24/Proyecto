@@ -3,6 +3,7 @@ using HankoSpa.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using HankoSpa.Repository.Users;
+using HankoSpa.DTOs;
 
 namespace HankoSpa.Repository.Users
 {
@@ -54,5 +55,69 @@ namespace HankoSpa.Repository.Users
             return await _userManager.IsInRoleAsync(user, roleName);
         }
 
+        public async Task<string> GenerateEmailConfirmationTokenAsync(User user)
+        {
+            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        }
+        public async Task<IdentityResult> ConfirmEmailAsync(User user, string token)
+        {
+            return await _userManager.ConfirmEmailAsync(user, token);
+        }
+        public async Task<User?> GetUserByIdAsync(Guid id)
+        {
+            return await _context.Users.FindAsync(id);
+
+        }
+        public async Task<List<User>> GetAllUsersAsync()
+        {
+            return await _userManager.Users.ToListAsync();
+        }
+           
+        public async Task<int> UpdateUserAsync(User user)
+        {
+            _context.Users.Update(user);
+           return  await _context.SaveChangesAsync();
+        }
+
+        public Task<IQueryable<User>> GetUsersQueryableAsync()
+        {
+            return Task.FromResult(_userManager.Users);
+        }
+
+        public async Task<bool> AssignCustomRoleAsync(User user, int customRolId)
+        {
+            var rol = await _context.CustomRoles.FindAsync(customRolId);
+            if (rol == null || user == null)
+                return false;
+
+            user.CustomRolId = customRolId;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> CustomRoleExistsAsync(string roleName)
+        {
+            if (string.IsNullOrWhiteSpace(roleName))
+                return false;
+
+            return await _roleManager.RoleExistsAsync(roleName);
+        }
+
+        public async Task<IdentityResult> DeleteUserAsync(User user)
+        {
+            if (user == null)
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Usuario no encontrado."
+                });
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            return result;
+           
+        }
     }
 }

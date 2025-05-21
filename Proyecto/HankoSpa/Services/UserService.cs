@@ -118,7 +118,7 @@ namespace HankoSpa.Services
 
         public async Task<string> GenerateEmailConfirmationTokenAsync(User user)
         {
-            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            return await _userRepository.GenerateEmailConfirmationTokenAsync(user);
         }
 
         public async Task<IdentityResult> AddUserAsync(User user, string password)
@@ -128,7 +128,7 @@ namespace HankoSpa.Services
 
         public async Task<IdentityResult> ConfirmEmailAsync(User user, string token)
         {
-            return await _userManager.ConfirmEmailAsync(user, token);
+            return await _userRepository.ConfirmEmailAsync(user, token);
         }
         public async Task<SignInResult> LoginAsync(LoginDTO dto)
         {
