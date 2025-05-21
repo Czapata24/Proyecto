@@ -159,7 +159,7 @@ namespace HankoSpa.Services
 
             if (user is null)
             {
-                return false;
+                return true;
             }
 
             if (user.CustomRol.NombreRol == Env.SUPERADMINROLENAME)
