@@ -22,6 +22,8 @@ namespace HankoSpa.Models
 
         public virtual ICollection<Cita>? Citas { get; set; }
 
+        public string Name { get; set; } = null!;
+
         public int CustomRolId { get; set; }
 
         public virtual CustomRol? CustomRol { get; set; }

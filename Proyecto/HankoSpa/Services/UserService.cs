@@ -9,6 +9,10 @@ using HankoSpa.Services.Interfaces;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using HankoSpa.Nucleo;
+using HankoSpa.Data;
+using ClaimsUser = System.Security.Claims.ClaimsPrincipal;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using HankoSpa.Core;
 
 namespace HankoSpa.Services
 {
@@ -17,12 +21,21 @@ namespace HankoSpa.Services
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly ICustomRolService _customRolSerivce;
+        private readonly AppDbContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(IUserRepository userRepository, IMapper mapper, ICustomRolService customRolSerivce)
+
+        public UserService(IHttpContextAccessor httpContextAccessor,IUserRepository userRepository, IMapper mapper, ICustomRolService customRolSerivce,AppDbContext context, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _customRolSerivce = customRolSerivce;
             _userRepository = userRepository;
             _mapper = mapper;
+            _context = context;
+            _signInManager = signInManager;
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
 
         public async Task<UserDTO?> GetUserByIdAsync(Guid id)
@@ -96,6 +109,65 @@ namespace HankoSpa.Services
         {
             var response = await _customRolSerivce.GetAllAsync();
             return response.Result ?? new List<CustomRolDTO>();
+        }
+        public async Task<User> GetUserAsync(string email)
+        {
+            return await _context.Users.Include(c => c.CustomRol).FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(User user)
+        {
+            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        }
+
+        public async Task<IdentityResult> AddUserAsync(User user, string password)
+        {
+            return await _userManager.CreateAsync(user, password);
+        }
+
+        public async Task<IdentityResult> ConfirmEmailAsync(User user, string token)
+        {
+            return await _userManager.ConfirmEmailAsync(user, token);
+        }
+        public async Task<SignInResult> LoginAsync(LoginDTO dto)
+        {
+            return await _signInManager.PasswordSignInAsync(dto.Email, dto.Password, false, false);
+        }
+
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
+        }
+
+        public bool CurrentUserIsAuthenticated()
+        {
+            ClaimsUser? user = _httpContextAccessor.HttpContext?.User;
+            return user?.Identity != null && user.Identity.IsAuthenticated;
+        }
+
+        public async Task<bool> CurrentUserIsAuthorizedAsync(string permission, string module)
+        {
+            ClaimsUser? claimsUser = _httpContextAccessor.HttpContext?.User;
+            if (claimsUser is null)
+            {
+                return false;
+            }
+            string? userName = claimsUser.Identity!.Name;
+
+            User? user = await GetUserAsync(userName);
+
+            if (user is null)
+            {
+                return false;
+            }
+
+            if (user.CustomRol.NombreRol == Env.SUPERADMINROLENAME)
+                return true;
+
+            return await _context.Permissions.Include(r => r.RolPermissions).AnyAsync(p => (p.Module == module && p.NombrePermiso == permission)
+            && p.RolPermissions.Any(rp => rp.CustomRolId == user.CustomRolId));
+
         }
 
     }

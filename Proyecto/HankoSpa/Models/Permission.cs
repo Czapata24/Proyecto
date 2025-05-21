@@ -13,6 +13,8 @@ namespace HankoSpa.Models
         [StringLength(50)]
         public string NombrePermiso { get; set; } = null!;
 
+        public string Description { get; set; } = null!;
+
         [Required(ErrorMessage = "El modulo del permiso es obligatorio")]
         public string Module { get; set; } = null!;
 

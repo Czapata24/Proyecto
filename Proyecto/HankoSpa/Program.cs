@@ -6,6 +6,8 @@ using HankoSpa.Services;
 using HankoSpa.Services.Interfaces;
 using HankoSpa.Models;
 using Microsoft.AspNetCore.Identity;
+using HankoSpa.Repository.Users;
+using IUserRepository = HankoSpa.Repository.IUserRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +19,7 @@ builder.Services.AddScoped<ICitaRepository, CitaRepository>();
 builder.Services.AddScoped<ICitaServices, CitasService>();
 builder.Services.AddScoped<IServicioRepository, ServicioRepository>();
 builder.Services.AddScoped<IServicioServices, ServicioService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserRepository, IUserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICustomRolRepository, CustomRolRepository>();
 builder.Services.AddScoped<ICustomRolService, CustomRolService>();
@@ -37,6 +39,16 @@ builder.Services.AddIdentity<User, IdentityRole>(x =>
 
 
 var app = builder.Build();
+SeedData(app);
+
+void SeedData(WebApplication app)
+{
+    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+    using var scope = scopedFactory!.CreateScope();
+    var service = scope.ServiceProvider.GetService<SeedDb>();
+    service!.SeedAsync().Wait();
+}
+
 
 using (var scope = app.Services.CreateScope())
 {

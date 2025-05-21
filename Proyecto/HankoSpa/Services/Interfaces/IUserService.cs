@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using HankoSpa.DTOs;
+using HankoSpa.Models;
 
 namespace HankoSpa.Services.Interfaces
 {
@@ -12,5 +13,19 @@ namespace HankoSpa.Services.Interfaces
         Task<bool> DeleteUserAsync(Guid id);
         Task<bool> AssignRoleToUserAsync(Guid userId, int customRolId);
         Task<List<CustomRolDTO>> GetAllRolesAsync();
+
+
+    }
+
+    public interface IUsersService
+    {
+        public Task<IdentityResult> AddUserAsync(User user, string password);
+        public bool CurrentUserIsAuthenticated();
+        public Task<bool> CurrentUserIsAuthorizedAsync(string permission, string module);
+        public Task<IdentityResult> ConfirmEmailAsync(User user, string token);
+        public Task<string> GenerateEmailConfirmationTokenAsync(User user);
+        public Task<User> GetUserAsync(string email);
+        public Task<SignInResult> LoginAsync(LoginDTO dto);
+        public Task LogoutAsync();
     }
 }
