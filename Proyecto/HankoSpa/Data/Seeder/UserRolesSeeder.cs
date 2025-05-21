@@ -11,9 +11,9 @@ namespace HankoSpa.Data.Seeder
     public class UserRolesSeeder
     {
         private readonly AppDbContext _context;
-        private readonly IUsersService _userServices;
+        private readonly IUserService _userServices;
 
-        public UserRolesSeeder(AppDbContext context, IUsersService usersService)
+        public UserRolesSeeder(AppDbContext context, IUserService usersService)
         {
             _context = context;
             _userServices = usersService;

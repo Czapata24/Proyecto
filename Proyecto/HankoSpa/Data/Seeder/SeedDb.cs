@@ -7,10 +7,10 @@ namespace HankoSpa.Models
     public class SeedDb
     {
         private readonly AppDbContext _context;
-        private readonly IUsersService _userServices;
+        private readonly IUserService _userServices;
 
 
-        public SeedDb (AppDbContext context, IUsersService usersService)
+        public SeedDb (AppDbContext context, IUserService usersService)
         {
             _context = context;
             _userServices = usersService;

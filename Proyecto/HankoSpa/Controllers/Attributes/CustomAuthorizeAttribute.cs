@@ -15,17 +15,17 @@ namespace HankoSpa.Controllers.Attributes
     {
         private readonly string _permission;
         private readonly string _module;
-        private readonly IUsersService _usersService;
-        public CustomAuthorizeFilter(string permission, string module, IUsersService usersService)
+        private readonly IUserService _userService;
+        public CustomAuthorizeFilter(string permission, string module, IUserService usersService)
         {
             _permission = permission;
             _module = module;
-            _usersService = usersService;
+            _userService = usersService;
         }
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            bool userIsAuthenticated = _usersService.CurrentUserIsAuthenticated();  
-            bool isAuthorized = await _usersService.CurrentUserIsAuthorizedAsync(_permission, _module);
+            bool userIsAuthenticated = _userService.CurrentUserIsAuthenticated();  
+            bool isAuthorized = await _userService.CurrentUserIsAuthorizedAsync(_permission, _module);
 
             if (!userIsAuthenticated)
             {

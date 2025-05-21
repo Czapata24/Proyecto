@@ -8,11 +8,11 @@ namespace HankoSpa.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IUsersService _usersService;
+        private readonly IUserService _userService;
 
-        public AccountController (IUsersService usersService)
+        public AccountController (IUserService usersService)
         {
-            _usersService = usersService;
+            _userService = usersService;
         }
 
         [HttpGet]
@@ -25,7 +25,7 @@ namespace HankoSpa.Controllers
         {
             if (ModelState.IsValid)
             {
-                Microsoft.AspNetCore.Identity.SignInResult result = await _usersService.LoginAsync(dto);
+                Microsoft.AspNetCore.Identity.SignInResult result = await _userService.LoginAsync(dto);
 
                 if (result.Succeeded)
                 {
@@ -67,7 +67,7 @@ namespace HankoSpa.Controllers
         [HttpGet]
         public async Task <IActionResult> Logout()
         {
-            await _usersService.LogoutAsync();
+            await _userService.LogoutAsync();
             return RedirectToAction(nameof(Login));
 
         }

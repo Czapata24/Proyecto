@@ -13,12 +13,6 @@ namespace HankoSpa.Services.Interfaces
         Task<bool> DeleteUserAsync(Guid id);
         Task<bool> AssignRoleToUserAsync(Guid userId, int customRolId);
         Task<List<CustomRolDTO>> GetAllRolesAsync();
-
-
-    }
-
-    public interface IUsersService
-    {
         public Task<IdentityResult> AddUserAsync(User user, string password);
         public bool CurrentUserIsAuthenticated();
         public Task<bool> CurrentUserIsAuthorizedAsync(string permission, string module);
@@ -27,5 +21,6 @@ namespace HankoSpa.Services.Interfaces
         public Task<User> GetUserAsync(string email);
         public Task<SignInResult> LoginAsync(LoginDTO dto);
         public Task LogoutAsync();
+
     }
 }

@@ -8,7 +8,7 @@ namespace HankoSpa.Models
     {
         public int CustomRolId { get; set; }
         public string Role { get; set; } = null!;
-        public CustomRol CustomRol { get; set; }
+
         public CustomRol Name { get; set; }
 
         public int PermissionId { get; set; }
