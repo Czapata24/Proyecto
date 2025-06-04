@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HankoSpa.DTOs;
+using HankoSpa.Helpers;
 using HankoSpa.Models;
 using HankoSpa.Nucleo;
 using HankoSpa.Repository;
@@ -28,7 +29,7 @@ namespace HankoSpa.Services
         {
             var entity = await _repo.GetByIdAsync(id);
             if (entity == null)
-                return new Response<PermissionDTO>(false, "Permiso no encontrado");
+                return ResponseHelper<PermissionDTO>.MakeResponseFail($"No existe registro con Id {id}");
             return new Response<PermissionDTO>(true, "OK", _mapper.Map<PermissionDTO>(entity));
         }
 
@@ -41,18 +42,22 @@ namespace HankoSpa.Services
 
         public async Task<Response<PermissionDTO>> UpdateAsync(PermissionDTO dto)
         {
+            if (dto.PermisoId == 0)
+            {
+                return ResponseHelper<PermissionDTO>.MakeResponseFail("El PermisoId es requerido");
+            }
             var entity = await _repo.GetByIdAsync(dto.PermisoId);
             if (entity == null)
-                return new Response<PermissionDTO>(false, "Permiso no encontrado");
+                return ResponseHelper<PermissionDTO>.MakeResponseFail("Permiso no encontrado");
             _mapper.Map(dto, entity);
             await _repo.UpdateAsync(entity);
-            return new Response<PermissionDTO>(true, "Permiso actualizado correctamente", _mapper.Map<PermissionDTO>(entity));
+            return ResponseHelper<PermissionDTO>.MakeResponseSuccess(_mapper.Map<PermissionDTO>(entity), "Permiso actualizado correctamente");
         }
 
         public async Task<Response<bool>> DeleteAsync(int id)
         {
             await _repo.DeleteAsync(id);
-            return new Response<bool>(true, "Permiso eliminado correctamente", true);
+            return ResponseHelper<bool>.MakeResponseSuccess(true, "Permiso eliminado correctamente");
         }
     }
 }

@@ -14,7 +14,10 @@ using ClaimsUser = System.Security.Claims.ClaimsPrincipal;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using HankoSpa.Core;
 using NuGet.Protocol.Core.Types;
-
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using HankoSpa.Helpers;
 
 namespace HankoSpa.Services
 {
@@ -27,9 +30,10 @@ namespace HankoSpa.Services
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IConfiguration _configuration;
 
 
-        public UserService(IHttpContextAccessor httpContextAccessor, IUserRepository userRepository, IMapper mapper, ICustomRolService customRolSerivce, AppDbContext context, UserManager<User> userManager, SignInManager<User> signInManager)
+        public UserService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IUserRepository userRepository, IMapper mapper, ICustomRolService customRolSerivce, AppDbContext context, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _customRolSerivce = customRolSerivce;
             _userRepository = userRepository;
@@ -38,6 +42,7 @@ namespace HankoSpa.Services
             _signInManager = signInManager;
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
+            _configuration = configuration;
         }
 
         public async Task<UserDTO?> GetUserByIdAsync(Guid id)
@@ -190,6 +195,55 @@ namespace HankoSpa.Services
             return new Response<T>(false, message)
             {
                 Errors = new List<string> { ex.Message }
+            };
+        }
+
+        public async Task<Response<UserTokenDTO>> LoginApiAsync(LoginDTO dto)
+        {
+            try
+            {
+                SignInResult result = await _signInManager.PasswordSignInAsync(dto.Email, dto.Password, false, false);
+                if (result.Succeeded)
+                {
+                    User user = await _userManager.FindByEmailAsync(dto.Email);
+                    UserTokenDTO token = await BuildTokenAsync(dto.Email, user.Id);
+                    return ResponseHelper<UserTokenDTO>.MakeResponseSuccess(token, "Inicio de sesión exitoso.");
+                }
+                return ResponseHelper<UserTokenDTO>.MakeResponseFail("Credenciales incorrectas");
+            }
+            catch (Exception ex)
+            {
+                return HandleException<UserTokenDTO>(ex, "Error al obtener los servicios.");
+            }
+        }
+
+        private async Task<UserTokenDTO> BuildTokenAsync(string email, string id)
+        {
+            List<Claim> claims = [
+                new (ClaimTypes.Name, email),
+                new (ClaimTypes.Email, email),
+                new (ClaimTypes.NameIdentifier, id),
+                new ("userid", id),
+            ];
+            User identityUser = await _userManager.FindByEmailAsync(email);
+
+            SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            DateTime expiration = DateTime.UtcNow.AddYears(120);
+
+            //DateTime myTime = expiration.ToLocalTime();
+
+            JwtSecurityToken token = new JwtSecurityToken(issuer: _configuration["Jwt:Issuer"],
+                                                        audience: _configuration["Jwt:Audience"],
+                                                        claims: claims,
+                                                        expires: expiration,
+                                                        signingCredentials: creds);
+
+            return new UserTokenDTO
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expiration = expiration,
             };
         }
     }

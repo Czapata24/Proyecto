@@ -22,6 +22,7 @@ namespace HankoSpa.Services.Interfaces
         public Task<string> GenerateEmailConfirmationTokenAsync(User user);
         public Task<User> GetUserAsync(string email);
         public Task<SignInResult> LoginAsync(LoginDTO dto);
+        public Task<Response<UserTokenDTO>> LoginApiAsync(LoginDTO dto);
         public Task LogoutAsync();
 
     }

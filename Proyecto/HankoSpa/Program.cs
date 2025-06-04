@@ -11,6 +11,8 @@ using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using AspNetCoreHero.ToastNotification.Notyf;
 using System;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +34,8 @@ builder.Services.AddScoped<ICustomRolRepository, CustomRolRepository>();
 builder.Services.AddScoped<ICustomRolService, CustomRolService>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddScoped<ICombosHelper, CombosHelper>();
+builder.Services.AddScoped<IPermissionService, PermissionService>();
+builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
 
 // Registro del repositorio PermissionRepository
 builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
@@ -44,6 +48,10 @@ builder.Services.AddNotyf(config => {
     config.DurationInSeconds = 5;
     config.IsDismissable = true;
     config.Position = NotyfPosition.TopRight;
+});
+
+builder.Services.Configure<ApiBehaviorOptions>(options => {
+    options.SuppressModelStateInvalidFilter = true;
 });
 
 builder.Services.AddIdentity<User, IdentityRole>(x =>
@@ -62,6 +70,20 @@ builder.Services.AddIdentity<User, IdentityRole>(x =>
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.AccessDeniedPath = "/Account/AccessDenied";
+});
+
+builder.Services.AddAuthentication().AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+{
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
 });
 
 // Políticas de autorización personalizadas
@@ -139,6 +161,23 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    endpoints.MapGet("/minimal", () =>
+    {
+        return "Miminal Api";
+    });
+});
+
 app.Run();
+
+public partial class Program
+{
+
+}
 
 
